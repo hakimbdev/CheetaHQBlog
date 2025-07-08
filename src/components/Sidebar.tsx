@@ -20,9 +20,11 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode, setDarkMode, currentPage, s
       {/* Logo */}
       <div className="p-6">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-            <PenTool className="w-5 h-5 text-white" />
-          </div>
+          <img
+            src="https://res.cloudinary.com/da8ptobvx/image/upload/v1751980304/Header_-_Copy_paqzpv.png"
+            alt="CHEETAHPVQ Logo"
+            className="w-8 h-8 rounded-lg object-cover"
+          />
           <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>CHEETAHPVQ</h1>
         </div>
       </div>
