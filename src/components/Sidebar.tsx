@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode, setDarkMode, currentPage, s
           <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
             <PenTool className="w-5 h-5 text-white" />
           </div>
-          <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>BlogSpace</h1>
+          <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>CHEETAHPVQ</h1>
         </div>
       </div>
 
