@@ -4,12 +4,13 @@ import Topbar from './components/Topbar';
 import BlogCard from './components/BlogCard';
 import FeaturedBlog from './components/FeaturedBlog';
 import MyBlogs from './pages/MyBlogs';
+import Rewards from './pages/Rewards';
 import { mockBlogs } from './data/mockBlogs';
 import { Plus } from 'lucide-react';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
-  const [currentPage, setCurrentPage] = useState<'home' | 'my-blogs'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'my-blogs' | 'rewards'>('home');
 
   useEffect(() => {
     if (darkMode) {
@@ -81,8 +82,10 @@ function App() {
               </button>
             </div>
           </div>
-        ) : (
+        ) : currentPage === 'my-blogs' ? (
           <MyBlogs darkMode={darkMode} />
+        ) : (
+          <Rewards />
         )}
       </main>
     </div>

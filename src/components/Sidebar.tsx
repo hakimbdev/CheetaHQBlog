@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, BarChart3, Settings, User, Heart, Bookmark, PenTool, Search, TrendingUp, Moon, Sun } from 'lucide-react';
+import { Home, BookOpen, BarChart3, Settings, User, Heart, Bookmark, PenTool, Search, TrendingUp, Moon, Sun, Gift } from 'lucide-react';
 
 interface SidebarProps {
   darkMode: boolean;
@@ -12,10 +12,7 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode, setDarkMode, currentPage, s
   const menuItems = [
     { icon: Home, label: 'Home', page: 'home' as const },
     { icon: BookOpen, label: 'My Blogs', page: 'my-blogs' as const },
-    { icon: BarChart3, label: 'Analytics', page: 'analytics' as const },
-    { icon: Heart, label: 'Liked', page: 'liked' as const },
-    { icon: Bookmark, label: 'Saved', page: 'saved' as const },
-    { icon: TrendingUp, label: 'Trending', page: 'trending' as const },
+    { icon: Gift, label: 'Rewards', page: 'rewards' as const },
   ];
 
   return (
@@ -49,7 +46,11 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode, setDarkMode, currentPage, s
           {menuItems.map((item) => (
             <li key={item.label}>
               <button
-                onClick={() => item.page === 'home' || item.page === 'my-blogs' ? setCurrentPage(item.page) : undefined}
+                onClick={() =>
+                  item.page === 'home' || item.page === 'my-blogs' || item.page === 'rewards'
+                    ? setCurrentPage(item.page)
+                    : undefined
+                }
                 className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                   currentPage === item.page
                     ? `${darkMode ? 'bg-purple-900/50 text-purple-400' : 'bg-purple-100 text-purple-700'}`
