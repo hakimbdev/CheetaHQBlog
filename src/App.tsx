@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
-import Topbar from './components/Topbar';
 import BlogCard from './components/BlogCard';
 import FeaturedBlog from './components/FeaturedBlog';
 import MyBlogs from './pages/MyBlogs';
 import Rewards from './pages/Rewards';
+import Navbar from './components/Navbar';
 import { mockBlogs } from './data/mockBlogs';
 import { Plus } from 'lucide-react';
 
@@ -22,8 +22,14 @@ function App() {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <Navbar darkMode={false} />
+      {/* Breadcrumb */}
+      <div className="pl-72 pt-6 pb-2">
+        <span className="text-sm text-gray-400 font-medium">Home / Blogs</span>
+      </div>
+      {/* Divider */}
+      <div className="pl-64 pr-4"><div className="border-b border-[#2d295e] w-full"></div></div>
       <Sidebar darkMode={darkMode} setDarkMode={setDarkMode} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <Topbar darkMode={darkMode} />
       
       {/* Main Content */}
       <main className="ml-64 pt-16">
