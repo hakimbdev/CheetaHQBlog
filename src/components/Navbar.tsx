@@ -1,9 +1,9 @@
 import React from 'react';
-import { Search, ShoppingCart, ChevronDown } from 'lucide-react';
+import { Search, ShoppingCart, ChevronDown, Menu } from 'lucide-react';
 
 const Navbar: React.FC<{ darkMode?: boolean }> = ({ darkMode = false }) => {
   return (
-    <nav className="w-full px-10 py-4 flex items-center justify-between bg-gradient-to-r from-[#1a1440] to-[#1a1a2e] shadow-lg">
+    <nav className="w-full px-4 sm:px-6 md:px-10 py-4 flex items-center justify-between bg-gradient-to-r from-[#1a1440] to-[#1a1a2e] shadow-lg">
       {/* Left: Logo & Brand */}
       <div className="flex items-center space-x-3">
         <img
@@ -14,8 +14,8 @@ const Navbar: React.FC<{ darkMode?: boolean }> = ({ darkMode = false }) => {
         <span className="text-2xl font-extrabold tracking-wide text-white uppercase">CHEETAHHPVQ</span>
       </div>
 
-      {/* Center: Nav Links & Search */}
-      <div className="flex-1 flex flex-col items-center">
+      {/* Center: Nav Links & Search (hide on mobile) */}
+      <div className="hidden md:flex flex-1 flex-col items-center">
         <div className="flex space-x-8 mb-3">
           <a href="#" className="text-white font-medium hover:text-purple-400 transition">Home</a>
           <a href="#" className="text-white font-medium hover:text-purple-400 transition">Shop</a>
@@ -35,8 +35,8 @@ const Navbar: React.FC<{ darkMode?: boolean }> = ({ darkMode = false }) => {
         </div>
       </div>
 
-      {/* Right: Icons, Avatar, Greeting */}
-      <div className="flex items-center space-x-6">
+      {/* Right: Icons, Avatar, Greeting (hide on mobile) */}
+      <div className="hidden md:flex items-center space-x-6">
         {/* Glowing icon placeholder */}
         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-tr from-purple-500 via-pink-500 to-blue-500 shadow-lg animate-pulse">
           <span className="text-white text-xl">🎨</span>
@@ -56,6 +56,14 @@ const Navbar: React.FC<{ darkMode?: boolean }> = ({ darkMode = false }) => {
           <span className="text-white font-medium">Hi, Precious</span>
           <ChevronDown className="w-5 h-5 text-white" />
         </div>
+      </div>
+
+      {/* Mobile Menu Button */}
+      <div className="md:hidden flex items-center">
+        {/* TODO: Implement mobile menu dropdown */}
+        <button className="text-white p-2 rounded-lg hover:bg-[#23214a] focus:outline-none">
+          <Menu className="w-7 h-7" />
+        </button>
       </div>
     </nav>
   );
