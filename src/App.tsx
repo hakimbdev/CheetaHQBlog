@@ -32,7 +32,7 @@ function App() {
           <Sidebar darkMode={darkMode} setDarkMode={setDarkMode} currentPage={currentPage} setCurrentPage={setCurrentPage} fixed={false} />
         </div>
         {/* Main Content */}
-        <main className="flex-1 w-full bg-gradient-to-b from-[#181A2A] to-[#23214a] pt-8 md:pt-12 pb-0">
+        <main className="flex-1 w-0 bg-gradient-to-b from-[#181A2A] to-[#23214a] pt-8 md:pt-12 pb-0">
           {currentPage === 'home' ? (
             <div>
               {/* Slider above header */}
@@ -73,7 +73,7 @@ function App() {
               </div>
 
               {/* Blog Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {mockBlogs.map((blog) => (
                   <BlogCard key={blog.id} blog={blog} darkMode={darkMode} />
                 ))}
