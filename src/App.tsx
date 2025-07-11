@@ -32,15 +32,15 @@ function App() {
           <Sidebar darkMode={darkMode} setDarkMode={setDarkMode} currentPage={currentPage} setCurrentPage={setCurrentPage} fixed={false} />
         </div>
         {/* Main Content */}
-        <main className="flex-1 w-0 bg-gradient-to-b from-[#181A2A] to-[#23214a] pt-8 md:pt-12 pb-0">
+        <main className="flex-1 w-0 bg-gradient-to-b from-[#181A2A] to-[#23214a] pt-6 md:pt-8 pb-0 px-2 md:px-4">
           {currentPage === 'home' ? (
             <div>
               {/* Slider above header */}
-              <div className="mb-6">
+              <div className="mb-4">
                 <Slider />
               </div>
               {/* Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-white">Discover Stories</h1>
                   <p className="text-lg mt-2 text-gray-300">Explore the latest articles and insights from our community</p>
@@ -57,7 +57,7 @@ function App() {
               </div>
 
               {/* Filter Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {['All', 'React', 'Web3', 'CSS', 'Blockchain', 'Next.js', 'Testing', 'API'].map((tag) => (
                   <button
                     key={tag}
@@ -73,14 +73,14 @@ function App() {
               </div>
 
               {/* Blog Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                 {mockBlogs.map((blog) => (
                   <BlogCard key={blog.id} blog={blog} darkMode={darkMode} />
                 ))}
               </div>
 
               {/* Load More Button */}
-              <div className="text-center mt-10">
+              <div className="text-center mt-8">
                 <button className="px-8 py-3 rounded-lg font-medium transition-colors shadow border bg-[#23214a] text-gray-200 hover:bg-[#181A2A] border-[#2d295e]">
                   Load More Articles
                 </button>

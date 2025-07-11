@@ -18,7 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode, setDarkMode, currentPage, s
 
   return (
     <aside
-      className="hidden md:flex w-[200px] h-full bg-gradient-to-b from-[#1a1440] to-[#181A2A] border-r border-[#23244a] shadow-xl rounded-r-3xl pt-6 z-40 transition-colors duration-300 flex-col"
+      className="hidden md:flex w-[170px] h-full bg-gradient-to-b from-[#1a1440] to-[#181A2A] border-r border-[#23244a] shadow-xl rounded-r-3xl pt-6 z-40 transition-colors duration-300 flex-col"
     >
       <div className="flex flex-col w-full h-full">
         {/* User Profile */}
