@@ -170,6 +170,34 @@ const Rewards: React.FC = () => {
             {'>'}
           </button>
         </div>
+
+        {/* Related Content Section */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Earn More Rewards</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { title: "Write Trending Posts", description: "Create engaging content that gets high engagement", reward: "50 HPVQ", icon: "📈" },
+              { title: "Comment on Posts", description: "Engage with the community to earn rewards", reward: "10 HPVQ", icon: "💬" },
+              { title: "Share Content", description: "Share your posts on social media", reward: "25 HPVQ", icon: "📤" }
+            ].map((item, index) => (
+              <div key={index} className="bg-[#23244A] rounded-xl p-4 border border-[#3B3C6C] hover:border-[#7B3FF2] transition-all duration-300">
+                <div className="flex items-center space-x-3 mb-3">
+                  <span className="text-2xl">{item.icon}</span>
+                  <div>
+                    <h3 className="font-semibold text-white text-sm">{item.title}</h3>
+                    <p className="text-[#B0B3D6] text-xs">{item.description}</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#B16FFF] font-semibold text-sm">{item.reward}</span>
+                  <button className="bg-[#7B3FF2] hover:bg-[#B16FFF] text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors">
+                    Start
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

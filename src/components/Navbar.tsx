@@ -1,7 +1,13 @@
 import React from 'react';
 import { Search, ShoppingCart, ChevronDown, Menu } from 'lucide-react';
 
-const Navbar: React.FC<{ darkMode?: boolean }> = ({ darkMode = false }) => {
+interface NavbarProps {
+  darkMode?: boolean;
+  currentPage: string;
+  setCurrentPage: (page: 'home' | 'shop' | 'explore-nfts' | 'blog' | 'my-blogs' | 'profile' | 'rewards') => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ darkMode = false, currentPage, setCurrentPage }) => {
   return (
     <nav className="w-full px-4 sm:px-6 md:px-10 py-4 flex items-center justify-between bg-gradient-to-r from-[#1a1440] to-[#1a1a2e] shadow-lg">
       {/* Left: Logo & Brand */}
@@ -17,13 +23,34 @@ const Navbar: React.FC<{ darkMode?: boolean }> = ({ darkMode = false }) => {
       {/* Center: Nav Links & Search (hide on mobile) */}
       <div className="hidden md:flex flex-1 flex-col items-center">
         <div className="flex space-x-8 mb-3">
-          <a href="#" className="text-white font-medium hover:text-purple-400 transition">Home</a>
-          <a href="#" className="text-white font-medium hover:text-purple-400 transition">Shop</a>
-          <a href="#" className="text-white font-medium hover:text-purple-400 transition">Explore NFTs</a>
-          <a href="#" className="text-white font-medium relative">
+          <button
+            onClick={() => setCurrentPage('home')}
+            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'home' ? 'font-bold' : ''}`}
+          >
+            Home
+            {currentPage === 'home' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
+          </button>
+          <button
+            onClick={() => setCurrentPage('shop')}
+            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'shop' ? 'font-bold' : ''}`}
+          >
+            Shop
+            {currentPage === 'shop' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
+          </button>
+          <button
+            onClick={() => setCurrentPage('explore-nfts')}
+            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'explore-nfts' ? 'font-bold' : ''}`}
+          >
+            Explore NFTs
+            {currentPage === 'explore-nfts' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
+          </button>
+          <button
+            onClick={() => setCurrentPage('blog')}
+            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'blog' ? 'font-bold' : ''}`}
+          >
             Blog
-            <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>
-          </a>
+            {currentPage === 'blog' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
+          </button>
         </div>
         <div className="relative w-full max-w-md">
           <input

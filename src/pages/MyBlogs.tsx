@@ -167,6 +167,39 @@ const MyBlogs: React.FC<MyBlogsProps> = ({ darkMode }) => {
           </button>
         </div>
       )}
+
+      {/* Related Content Section */}
+      <div className="mt-12">
+        <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Suggested Topics</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { title: "Web3 Development", description: "Learn blockchain and smart contract development", category: "Development" },
+            { title: "React Best Practices", description: "Advanced React patterns and optimization", category: "React" },
+            { title: "UI/UX Design", description: "Create beautiful and accessible user interfaces", category: "Design" }
+          ].map((topic, index) => (
+            <div key={index} className={`rounded-lg p-4 border transition-all duration-300 group ${
+              darkMode 
+                ? 'bg-gray-800 border-gray-700 hover:border-purple-500' 
+                : 'bg-white border-gray-200 hover:border-purple-500'
+            }`}>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-xs">
+                  <span className="bg-purple-500 text-white px-2 py-1 rounded-full">{topic.category}</span>
+                </div>
+                <h3 className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{topic.title}</h3>
+                <p className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{topic.description}</p>
+                <button className={`w-full py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  darkMode 
+                    ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}>
+                  Start Writing
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

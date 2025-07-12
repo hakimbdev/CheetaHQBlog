@@ -4,14 +4,21 @@ import BlogCard from './components/BlogCard';
 import FeaturedBlog from './components/FeaturedBlog';
 import MyBlogs from './pages/MyBlogs';
 import Rewards from './pages/Rewards';
+import Shop from './pages/Shop';
+import ExploreNFTs from './pages/ExploreNFTs';
+import Blog from './pages/Blog';
+import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
 import { mockBlogs } from './data/mockBlogs';
 import { Plus } from 'lucide-react';
 import Slider from './components/Slider';
+import CreatePostModal from './components/CreatePostModal';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
-  const [currentPage, setCurrentPage] = useState<'home' | 'my-blogs' | 'rewards'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'my-blogs' | 'rewards' | 'shop' | 'explore-nfts' | 'blog' | 'profile'>('home');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [blogs, setBlogs] = useState(mockBlogs);
 
   useEffect(() => {
     if (darkMode) {
@@ -24,7 +31,29 @@ function App() {
   return (
     <div className={`min-h-screen transition-colors duration-300 overflow-x-hidden w-full ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Navbar at the top - OUTSIDE flex row */}
-      <Navbar darkMode={false} />
+      <Navbar darkMode={false} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      {/* Create Post Modal */}
+      <CreatePostModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onCreate={(post) => {
+          setBlogs([
+            {
+              id: (blogs.length + 1).toString(),
+              title: post.title,
+              description: post.description,
+              image: post.image || 'https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800',
+              author: 'Precious',
+              date: 'Just now',
+              readTime: '5 min read',
+              likes: 0,
+              comments: 0,
+              category: post.category,
+            },
+            ...blogs,
+          ]);
+        }}
+      />
       {/* Layout wrapper: sidebar + main content (sidebar is now part of the flex row, not fixed) */}
       <div className="flex w-full max-w-full">
         {/* Sidebar, merged with main body */}
@@ -45,7 +74,10 @@ function App() {
                   <h1 className="text-3xl font-bold text-white">Discover Stories</h1>
                   <p className="text-lg mt-2 text-gray-300">Explore the latest articles and insights from our community</p>
                 </div>
-                <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex items-center space-x-2 group shadow-lg">
+                <button
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex items-center space-x-2 group shadow-lg"
+                  onClick={() => setShowCreateModal(true)}
+                >
                   <Plus className="w-5 h-5" />
                   <span>Create Post</span>
                 </button>
@@ -74,7 +106,7 @@ function App() {
 
               {/* Blog Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                {mockBlogs.map((blog) => (
+                {blogs.map((blog) => (
                   <BlogCard key={blog.id} blog={blog} darkMode={darkMode} />
                 ))}
               </div>
@@ -85,9 +117,48 @@ function App() {
                   Load More Articles
                 </button>
               </div>
+
+              {/* Related Content Section */}
+              <div className="mt-12">
+                <h2 className="text-2xl font-bold text-white mb-6">Related Stories</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {blogs.slice(0, 3).map((blog) => (
+                    <div key={`related-${blog.id}`} className="bg-[#23214a] rounded-lg p-4 border border-[#2d295e] hover:border-purple-500 transition-all duration-300 group">
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        className="w-full h-32 object-cover rounded-lg mb-3 group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2 text-xs text-gray-400">
+                          <span className="bg-purple-500 text-white px-2 py-1 rounded-full">{blog.category}</span>
+                          <span>•</span>
+                          <span>{blog.readTime}</span>
+                        </div>
+                        <h3 className="font-semibold text-white text-sm">{blog.title}</h3>
+                        <p className="text-gray-300 text-xs line-clamp-2">{blog.description}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-white text-xs">{blog.author}</span>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-gray-400 text-xs">❤️ {blog.likes}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : currentPage === 'my-blogs' ? (
             <MyBlogs darkMode={darkMode} />
+          ) : currentPage === 'shop' ? (
+            <Shop darkMode={darkMode} />
+          ) : currentPage === 'explore-nfts' ? (
+            <ExploreNFTs darkMode={darkMode} />
+          ) : currentPage === 'blog' ? (
+            <Blog darkMode={darkMode} />
+          ) : currentPage === 'profile' ? (
+            <Profile darkMode={darkMode} />
           ) : (
             <Rewards />
           )}
