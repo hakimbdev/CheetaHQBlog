@@ -33,15 +33,17 @@ function App() {
     <div className={`min-h-screen transition-colors duration-300 overflow-x-hidden w-full ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Navbar at the top - OUTSIDE flex row */}
       <Navbar darkMode={false} currentPage={currentPage} setCurrentPage={setCurrentPage} onSidebarToggle={() => setSidebarOpen(true)} />
-      {/* Mobile Sidebar */}
-      <Sidebar
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
+      {/* Mobile Sidebar (only on mobile) */}
+      <div className="md:hidden">
+        <Sidebar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+      </div>
       {/* Create Post Modal */}
       <CreatePostModal
         isOpen={showCreateModal}
