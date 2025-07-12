@@ -1,17 +1,36 @@
-import React from 'react';
-import { Search, ShoppingCart, ChevronDown, Menu } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, ShoppingCart, ChevronDown, Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   darkMode?: boolean;
   currentPage: string;
   setCurrentPage: (page: 'home' | 'shop' | 'explore-nfts' | 'blog' | 'my-blogs' | 'profile' | 'rewards') => void;
+  onSidebarToggle?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ darkMode = false, currentPage, setCurrentPage }) => {
+const navLinks = [
+  { label: 'Home', page: 'home' },
+  { label: 'Shop', page: 'shop' },
+  { label: 'Explore NFTs', page: 'explore-nfts' },
+  { label: 'Blog', page: 'blog' },
+];
+
+const Navbar: React.FC<NavbarProps> = ({ darkMode = false, currentPage, setCurrentPage, onSidebarToggle }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
-    <nav className="w-full px-4 sm:px-6 md:px-10 py-4 flex items-center justify-between bg-gradient-to-r from-[#1a1440] to-[#1a1a2e] shadow-lg">
+    <nav className="w-full px-4 sm:px-6 md:px-10 py-4 flex items-center justify-between bg-gradient-to-r from-[#1a1440] to-[#1a1a2e] shadow-lg relative">
       {/* Left: Logo & Brand */}
       <div className="flex items-center space-x-3">
+        {/* Sidebar toggle for mobile (only visible on mobile) */}
+        <button
+          className="md:hidden mr-2 text-white p-2 rounded-lg hover:bg-[#23214a] focus:outline-none focus:ring-2 focus:ring-purple-500"
+          onClick={onSidebarToggle}
+          aria-label="Open sidebar menu"
+          tabIndex={0}
+        >
+          <Menu className="w-7 h-7" />
+        </button>
         <img
           src="https://res.cloudinary.com/da8ptobvx/image/upload/v1751980304/Header_-_Copy_paqzpv.png"
           alt="Logo"
@@ -23,34 +42,16 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode = false, currentPage, setCurre
       {/* Center: Nav Links & Search (hide on mobile) */}
       <div className="hidden md:flex flex-1 flex-col items-center">
         <div className="flex space-x-8 mb-3">
-          <button
-            onClick={() => setCurrentPage('home')}
-            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'home' ? 'font-bold' : ''}`}
-          >
-            Home
-            {currentPage === 'home' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
-          </button>
-          <button
-            onClick={() => setCurrentPage('shop')}
-            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'shop' ? 'font-bold' : ''}`}
-          >
-            Shop
-            {currentPage === 'shop' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
-          </button>
-          <button
-            onClick={() => setCurrentPage('explore-nfts')}
-            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'explore-nfts' ? 'font-bold' : ''}`}
-          >
-            Explore NFTs
-            {currentPage === 'explore-nfts' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
-          </button>
-          <button
-            onClick={() => setCurrentPage('blog')}
-            className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === 'blog' ? 'font-bold' : ''}`}
-          >
-            Blog
-            {currentPage === 'blog' && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
-          </button>
+          {navLinks.map(link => (
+            <button
+              key={link.page}
+              onClick={() => setCurrentPage(link.page as any)}
+              className={`text-white font-medium hover:text-purple-400 transition relative ${currentPage === link.page ? 'font-bold' : ''}`}
+            >
+              {link.label}
+              {currentPage === link.page && <span className="absolute left-0 -bottom-1 w-full h-1 bg-purple-500 rounded-full"></span>}
+            </button>
+          ))}
         </div>
         <div className="relative w-full max-w-md">
           <input
@@ -85,13 +86,23 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode = false, currentPage, setCurre
         </div>
       </div>
 
-      {/* Mobile Menu Button */}
-      <div className="md:hidden flex items-center">
-        {/* TODO: Implement mobile menu dropdown */}
-        <button className="text-white p-2 rounded-lg hover:bg-[#23214a] focus:outline-none">
-          <Menu className="w-7 h-7" />
-        </button>
-      </div>
+      {/* Mobile Dropdown Menu (not sidebar) */}
+      {mobileMenuOpen && (
+        <div className="absolute top-full left-0 w-full bg-[#181A2A] z-50 flex flex-col items-center py-4 shadow-lg md:hidden animate-fade-in">
+          {navLinks.map(link => (
+            <button
+              key={link.page}
+              onClick={() => {
+                setCurrentPage(link.page as any);
+                setMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-6 py-3 text-white font-medium hover:text-purple-400 transition ${currentPage === link.page ? 'font-bold' : ''}`}
+            >
+              {link.label}
+            </button>
+          ))}
+        </div>
+      )}
     </nav>
   );
 };

@@ -19,6 +19,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'my-blogs' | 'rewards' | 'shop' | 'explore-nfts' | 'blog' | 'profile'>('home');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [blogs, setBlogs] = useState(mockBlogs);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -31,7 +32,16 @@ function App() {
   return (
     <div className={`min-h-screen transition-colors duration-300 overflow-x-hidden w-full ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Navbar at the top - OUTSIDE flex row */}
-      <Navbar darkMode={false} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <Navbar darkMode={false} currentPage={currentPage} setCurrentPage={setCurrentPage} onSidebarToggle={() => setSidebarOpen(true)} />
+      {/* Mobile Sidebar */}
+      <Sidebar
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
       {/* Create Post Modal */}
       <CreatePostModal
         isOpen={showCreateModal}
@@ -56,7 +66,7 @@ function App() {
       />
       {/* Layout wrapper: sidebar + main content (sidebar is now part of the flex row, not fixed) */}
       <div className="flex w-full max-w-full">
-        {/* Sidebar, merged with main body */}
+        {/* Sidebar, merged with main body (desktop only) */}
         <div className="hidden md:block">
           <Sidebar darkMode={darkMode} setDarkMode={setDarkMode} currentPage={currentPage} setCurrentPage={setCurrentPage} fixed={false} />
         </div>
