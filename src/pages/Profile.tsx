@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Edit, Settings, Camera, Heart, Eye, Bookmark, Share2, Calendar, MapPin, Link, Twitter, Github, Linkedin } from 'lucide-react';
 
 interface ProfileStats {
@@ -125,11 +125,48 @@ const relatedUsers: RelatedUser[] = [
   }
 ];
 
+// Restore ProfileProps interface
 interface ProfileProps {
   darkMode: boolean;
+  profile: {
+    name: string;
+    email: string;
+    bio: string;
+    location: string;
+    joined: string;
+    avatar: string;
+  };
+  setProfile: (profile: any) => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ darkMode }) => {
+const Profile: React.FC<ProfileProps> = ({ darkMode, profile, setProfile }) => {
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editFields, setEditFields] = useState(profile);
+  const [avatarPreview, setAvatarPreview] = useState(profile.avatar);
+
+  const handleEditProfile = () => {
+    setEditFields(profile);
+    setAvatarPreview(profile.avatar);
+    setEditModalOpen(true);
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+        setEditFields({ ...editFields, avatar: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveProfile = () => {
+    setProfile(editFields);
+    setEditModalOpen(false);
+  };
+
   return (
     <div className="space-y-8">
       {/* Profile Header */}
@@ -138,7 +175,7 @@ const Profile: React.FC<ProfileProps> = ({ darkMode }) => {
           {/* Profile Image */}
           <div className="relative">
             <img
-              src="https://res.cloudinary.com/da8ptobvx/image/upload/v1752071208/Header_-_Copy_2_tbflho.png"
+              src={profile.avatar}
               alt="Profile"
               className="w-24 h-24 rounded-full object-cover border-4 border-purple-500"
             />
@@ -146,46 +183,34 @@ const Profile: React.FC<ProfileProps> = ({ darkMode }) => {
               <Camera className="w-4 h-4 text-white" />
             </button>
           </div>
-          
           {/* Profile Info */}
           <div className="flex-1">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-white">Precious</h1>
-                <p className="text-gray-300 text-sm">Precious30@gmail.com</p>
-                <p className="text-gray-400 text-sm mt-2">Passionate Web3 developer and blockchain enthusiast. Building the future of decentralized applications.</p>
-                
+                <h1 className="text-2xl font-bold text-white">{profile.name}</h1>
+                <p className="text-gray-300 text-sm">{profile.email}</p>
+                <p className="text-gray-400 text-sm mt-2">{profile.bio}</p>
                 <div className="flex items-center space-x-4 mt-3 text-sm text-gray-400">
                   <div className="flex items-center space-x-1">
                     <MapPin className="w-4 h-4" />
-                    <span>San Francisco, CA</span>
+                    <span>{profile.location}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-4 h-4" />
-                    <span>Joined Jan 2023</span>
+                    <span>Joined {profile.joined}</span>
                   </div>
                 </div>
-                
                 <div className="flex items-center space-x-3 mt-3">
-                  <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-                    <Twitter className="w-5 h-5" />
-                  </a>
-                  <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-                    <Github className="w-5 h-5" />
-                  </a>
-                  <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-                    <Linkedin className="w-5 h-5" />
-                  </a>
+                  {/* Social icons removed */}
                 </div>
               </div>
-              
               <div className="flex items-center space-x-3">
-                <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
+                <button
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
+                  onClick={handleEditProfile}
+                >
                   <Edit className="w-4 h-4 inline mr-2" />
                   Edit Profile
-                </button>
-                <button className="bg-[#181A2A] text-gray-300 px-4 py-2 rounded-lg border border-[#2d295e] hover:bg-[#23214a] transition-colors">
-                  <Settings className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -290,6 +315,89 @@ const Profile: React.FC<ProfileProps> = ({ darkMode }) => {
           ))}
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      {editModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className={`rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto ${darkMode ? 'bg-gray-900' : 'bg-white'} shadow-xl`}>
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Edit Profile</h2>
+              <button onClick={() => setEditModalOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors text-2xl leading-none">
+                ×
+              </button>
+            </div>
+            <div className="p-4 sm:p-6 space-y-4">
+              {/* Avatar Upload */}
+              <div className="flex flex-col items-center space-y-2 mb-4">
+                <img
+                  src={avatarPreview}
+                  alt="Avatar Preview"
+                  className="w-20 h-20 rounded-full object-cover border-4 border-purple-500 mb-2"
+                />
+                <label className="block">
+                  <span className="sr-only">Choose avatar</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-purple-500 file:to-pink-500 file:text-white hover:file:from-purple-600 hover:file:to-pink-600"
+                    onChange={handleAvatarChange}
+                  />
+                </label>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={editFields.name}
+                  onChange={e => setEditFields({ ...editFields, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={editFields.email}
+                  onChange={e => setEditFields({ ...editFields, email: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
+                <textarea
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={editFields.bio}
+                  onChange={e => setEditFields({ ...editFields, bio: e.target.value })}
+                  rows={3}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={editFields.location}
+                  onChange={e => setEditFields({ ...editFields, location: e.target.value })}
+                />
+              </div>
+              <div className="flex justify-end space-x-3 pt-2">
+                <button
+                  className="px-5 py-2 rounded-lg font-medium bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                  onClick={() => setEditModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-5 py-2 rounded-lg font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition"
+                  onClick={handleSaveProfile}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

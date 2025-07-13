@@ -10,7 +10,7 @@ import Blog from './pages/Blog';
 import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
 import { mockBlogs } from './data/mockBlogs';
-import { Plus } from 'lucide-react';
+import { Plus, ArrowDown } from 'lucide-react';
 import Slider from './components/Slider';
 import CreatePostModal from './components/CreatePostModal';
 
@@ -20,6 +20,184 @@ function App() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [blogs, setBlogs] = useState(mockBlogs);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showMoreArticles, setShowMoreArticles] = useState(false);
+
+  // LIFTED PROFILE STATE
+  const [profile, setProfile] = useState({
+    name: 'Precious',
+    email: 'Precious30@gmail.com',
+    bio: 'Passionate Web3 developer and blockchain enthusiast. Building the future of decentralized applications.',
+    location: 'San Francisco, CA',
+    joined: 'Jan 2023',
+    avatar: 'https://res.cloudinary.com/da8ptobvx/image/upload/v1752071208/Header_-_Copy_2_tbflho.png',
+  });
+
+  // Additional articles for "Load More" functionality
+  const additionalArticles = [
+    {
+      id: '101',
+      title: "Advanced React Hooks Patterns",
+      description: "Master advanced React hooks patterns for better state management and component composition.",
+      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=300&fit=crop",
+      author: "Mike Chen",
+      date: "1 day ago",
+      readTime: "8 min read",
+      likes: 156,
+      comments: 23,
+      category: "React"
+    },
+    {
+      id: '102',
+      title: "Web3 Security Best Practices",
+      description: "Essential security practices for Web3 developers and blockchain applications.",
+      image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop",
+      author: "Emma Davis",
+      date: "2 days ago",
+      readTime: "12 min read",
+      likes: 289,
+      comments: 45,
+      category: "Security"
+    },
+    {
+      id: '103',
+      title: "DeFi Protocol Development Guide",
+      description: "Building decentralized finance protocols with modern development tools and frameworks.",
+      image: "https://images.unsplash.com/photo-1639762681057-408e52174e2b?w=400&h=300&fit=crop",
+      author: "Alex Thompson",
+      date: "3 days ago",
+      readTime: "15 min read",
+      likes: 198,
+      comments: 34,
+      category: "DeFi"
+    },
+    {
+      id: '104',
+      title: "NFT Marketplace Architecture",
+      description: "Understanding the architecture and development patterns for building NFT marketplaces.",
+      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=300&fit=crop",
+      author: "Sarah Johnson",
+      date: "4 days ago",
+      readTime: "10 min read",
+      likes: 234,
+      comments: 28,
+      category: "NFTs"
+    },
+    {
+      id: '105',
+      title: "Blockchain Scalability Solutions",
+      description: "Exploring Layer 2 solutions and other scalability approaches for blockchain networks.",
+      image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop",
+      author: "David Kim",
+      date: "5 days ago",
+      readTime: "14 min read",
+      likes: 167,
+      comments: 19,
+      category: "Blockchain"
+    },
+    {
+      id: '106',
+      title: "Smart Contract Testing Strategies",
+      description: "Comprehensive testing strategies for smart contracts to ensure security and reliability.",
+      image: "https://images.unsplash.com/photo-1639762681057-408e52174e2b?w=400&h=300&fit=crop",
+      author: "Lisa Wang",
+      date: "6 days ago",
+      readTime: "11 min read",
+      likes: 145,
+      comments: 22,
+      category: "Testing"
+    }
+  ];
+
+  // Related content for different categories
+  const relatedContent = {
+    react: [
+      {
+        id: 'r1',
+        title: "React Performance Optimization",
+        description: "Advanced techniques for optimizing React applications for better performance.",
+        image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=300&h=200&fit=crop",
+        author: "Mike Chen",
+        category: "React",
+        likes: 89
+      },
+      {
+        id: 'r2',
+        title: "State Management with Redux Toolkit",
+        description: "Modern state management patterns using Redux Toolkit for React applications.",
+        image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=300&h=200&fit=crop",
+        author: "Emma Davis",
+        category: "React",
+        likes: 134
+      },
+      {
+        id: 'r3',
+        title: "React Server Components",
+        description: "Understanding React Server Components and their impact on modern web development.",
+        image: "https://images.unsplash.com/photo-1639762681057-408e52174e2b?w=300&h=200&fit=crop",
+        author: "Alex Thompson",
+        category: "React",
+        likes: 67
+      }
+    ],
+    web3: [
+      {
+        id: 'w1',
+        title: "Web3 Authentication Methods",
+        description: "Exploring different authentication methods for Web3 applications.",
+        image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=300&h=200&fit=crop",
+        author: "Sarah Johnson",
+        category: "Web3",
+        likes: 156
+      },
+      {
+        id: 'w2',
+        title: "Decentralized Storage Solutions",
+        description: "Understanding IPFS and other decentralized storage solutions for Web3 apps.",
+        image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=300&h=200&fit=crop",
+        author: "Mike Chen",
+        category: "Web3",
+        likes: 98
+      },
+      {
+        id: 'w3',
+        title: "Web3 Development Tools",
+        description: "Essential tools and frameworks for modern Web3 development.",
+        image: "https://images.unsplash.com/photo-1639762681057-408e52174e2b?w=300&h=200&fit=crop",
+        author: "Emma Davis",
+        category: "Web3",
+        likes: 123
+      }
+    ],
+    blockchain: [
+      {
+        id: 'b1',
+        title: "Consensus Mechanisms Explained",
+        description: "Understanding different consensus mechanisms in blockchain networks.",
+        image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=300&h=200&fit=crop",
+        author: "David Kim",
+        category: "Blockchain",
+        likes: 178
+      },
+      {
+        id: 'b2',
+        title: "Cross-Chain Interoperability",
+        description: "Techniques for achieving interoperability between different blockchain networks.",
+        image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=300&h=200&fit=crop",
+        author: "Alex Thompson",
+        category: "Blockchain",
+        likes: 145
+      },
+      {
+        id: 'b3',
+        title: "Blockchain Governance Models",
+        description: "Understanding different governance models in decentralized networks.",
+        image: "https://images.unsplash.com/photo-1639762681057-408e52174e2b?w=300&h=200&fit=crop",
+        author: "Sarah Johnson",
+        category: "Blockchain",
+        likes: 89
+      }
+    ]
+  };
 
   useEffect(() => {
     if (darkMode) {
@@ -29,10 +207,16 @@ function App() {
     }
   }, [darkMode]);
 
+  const handleLoadMore = () => {
+    setShowMoreArticles(true);
+  };
+
+  const displayedBlogs = showMoreArticles ? [...blogs, ...additionalArticles] : blogs;
+
   return (
     <div className={`min-h-screen transition-colors duration-300 overflow-x-hidden w-full ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Navbar at the top - OUTSIDE flex row */}
-      <Navbar darkMode={false} currentPage={currentPage} setCurrentPage={setCurrentPage} onSidebarToggle={() => setSidebarOpen(true)} />
+      <Navbar darkMode={false} currentPage={currentPage} setCurrentPage={setCurrentPage} onSidebarToggle={() => setSidebarOpen(true)} profile={{ name: profile.name, avatar: profile.avatar }} />
       {/* Mobile Sidebar (only on mobile) */}
       <div className="md:hidden">
         <Sidebar
@@ -118,19 +302,117 @@ function App() {
 
               {/* Blog Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                {blogs.map((blog) => (
+                {displayedBlogs.map((blog) => (
                   <BlogCard key={blog.id} blog={blog} darkMode={darkMode} />
                 ))}
               </div>
 
               {/* Load More Button */}
-              <div className="text-center mt-8">
-                <button className="px-8 py-3 rounded-lg font-medium transition-colors shadow border bg-[#23214a] text-gray-200 hover:bg-[#181A2A] border-[#2d295e]">
-                  Load More Articles
-                </button>
-              </div>
+              {!showMoreArticles && (
+                <div className="text-center mt-8">
+                  <button 
+                    onClick={handleLoadMore}
+                    className="px-8 py-3 rounded-lg font-medium transition-colors shadow border bg-[#23214a] text-gray-200 hover:bg-[#181A2A] border-[#2d295e] flex items-center space-x-2 mx-auto"
+                  >
+                    <span>Load More Articles</span>
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
 
-              {/* Related Content Section */}
+              {/* Related Content Sections */}
+              {showMoreArticles && (
+                <div className="mt-12 space-y-12">
+                  {/* React Related Content */}
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-6">React Development</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {relatedContent.react.map((article) => (
+                        <div key={article.id} className="bg-[#23214a] rounded-lg p-4 border border-[#2d295e] hover:border-purple-500 transition-all duration-300 group">
+                          <img
+                            src={article.image}
+                            alt={article.title}
+                            className="w-full h-32 object-cover rounded-lg mb-3 group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2 text-xs text-gray-400">
+                              <span className="bg-purple-500 text-white px-2 py-1 rounded-full">{article.category}</span>
+                            </div>
+                            <h3 className="font-semibold text-white text-sm">{article.title}</h3>
+                            <p className="text-gray-300 text-xs line-clamp-2">{article.description}</p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-white text-xs">{article.author}</span>
+                              <div className="flex items-center space-x-1">
+                                <span className="text-gray-400 text-xs">❤️ {article.likes}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Web3 Related Content */}
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-6">Web3 & Blockchain</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {relatedContent.web3.map((article) => (
+                        <div key={article.id} className="bg-[#23214a] rounded-lg p-4 border border-[#2d295e] hover:border-purple-500 transition-all duration-300 group">
+                          <img
+                            src={article.image}
+                            alt={article.title}
+                            className="w-full h-32 object-cover rounded-lg mb-3 group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2 text-xs text-gray-400">
+                              <span className="bg-purple-500 text-white px-2 py-1 rounded-full">{article.category}</span>
+                            </div>
+                            <h3 className="font-semibold text-white text-sm">{article.title}</h3>
+                            <p className="text-gray-300 text-xs line-clamp-2">{article.description}</p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-white text-xs">{article.author}</span>
+                              <div className="flex items-center space-x-1">
+                                <span className="text-gray-400 text-xs">❤️ {article.likes}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Blockchain Related Content */}
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-6">Blockchain Technology</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {relatedContent.blockchain.map((article) => (
+                        <div key={article.id} className="bg-[#23214a] rounded-lg p-4 border border-[#2d295e] hover:border-purple-500 transition-all duration-300 group">
+                          <img
+                            src={article.image}
+                            alt={article.title}
+                            className="w-full h-32 object-cover rounded-lg mb-3 group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2 text-xs text-gray-400">
+                              <span className="bg-purple-500 text-white px-2 py-1 rounded-full">{article.category}</span>
+                            </div>
+                            <h3 className="font-semibold text-white text-sm">{article.title}</h3>
+                            <p className="text-gray-300 text-xs line-clamp-2">{article.description}</p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-white text-xs">{article.author}</span>
+                              <div className="flex items-center space-x-1">
+                                <span className="text-gray-400 text-xs">❤️ {article.likes}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Original Related Content Section */}
               <div className="mt-12">
                 <h2 className="text-2xl font-bold text-white mb-6">Related Stories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -170,7 +452,7 @@ function App() {
           ) : currentPage === 'blog' ? (
             <Blog darkMode={darkMode} />
           ) : currentPage === 'profile' ? (
-            <Profile darkMode={darkMode} />
+            <Profile darkMode={darkMode} profile={profile} setProfile={setProfile} />
           ) : (
             <Rewards />
           )}
